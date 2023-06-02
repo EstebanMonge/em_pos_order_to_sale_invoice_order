@@ -24,6 +24,15 @@ class SaleOrder(models.Model):
         }
 
     @api.model
+    def open_url(self):
+        return {
+#            'type': 'ir.actions.act_url',
+#            'url': 'https://www.estebanmonge.site'
+             "type": "ir.actions.act_window",
+             "res_model": "account.move",
+             "views": [[False, "list"]],
+        }
+    @api.model
     def create_order_from_pos(self, order_data, action):
         invoice_lines = []
         SaleOrderLine = self.env["sale.order.line"]
@@ -54,7 +63,7 @@ class SaleOrder(models.Model):
             # we rewrite data, because onchange could alter some
             # data (like quantity, or price)
             sale_order_line.write(order_line_vals)
-        invoice_lines.append((0, 0, invoice_vals))
+            invoice_lines.append((0, 0, invoice_vals))
 
         # Confirm Sale Order
         if action in ["confirmed", "delivered"]:
